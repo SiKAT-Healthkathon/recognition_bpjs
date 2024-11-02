@@ -19,7 +19,7 @@ late List<CameraDescription> _cameras;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: ".env");
 
   await Supabase.initialize(
     url: dotenv.env['YOUR_SUPABASE_URL'] ?? '',
