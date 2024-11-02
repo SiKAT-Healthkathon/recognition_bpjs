@@ -28,7 +28,7 @@ class UserServices {
           .from('reservations')
           .select('check_in_at, status, tanggal')
           .eq('nik', nik)
-          .eq('status', 'Belum Datang')
+          .or('status.eq.Terdaftar,status.eq.Belum Datang')
           .order('tanggal', ascending: true)
           .limit(1)
           .maybeSingle();
