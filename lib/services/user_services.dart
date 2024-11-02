@@ -26,8 +26,11 @@ class UserServices {
     try {
       final response = await client
           .from('reservations')
-          .select('check_in_at')
+          .select('check_in_at, status, tanggal')
           .eq('nik', nik)
+          .eq('status', 'Belum Datang')
+          .order('tanggal', ascending: true)
+          .limit(1)
           .maybeSingle();
 
       if (response == null) {
