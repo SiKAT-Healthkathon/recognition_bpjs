@@ -15,15 +15,43 @@ class UserServices {
         return null;
       }
       UserModel user = UserModel.fromJson(response);
-      if (user.checkInAt == null) {
-        await client
-            .from('users')
-            .update({'check_in_at': DateTime.now().toIso8601String()}).eq(
-          'nik',
-          user.nik,
-        );
-      }
+
       return user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<bool> checkIn({required String nik}) async {
+    try {
+      final response = await client
+          .from('reservations')
+          .select('check_in_at')
+          .eq('nik', nik)
+          .maybeSingle();
+
+      if (response == null) {
+        throw Exception(
+            'Failed to fetch check-in time. Please try again later.');
+      }
+
+      final lastCheckInAt = response['check_in_at'] as String?;
+      if (lastCheckInAt != null) {
+        DateTime lastCheckInDateTime = DateTime.parse(lastCheckInAt);
+        DateTime currentDateTime = DateTime.now();
+
+        if (currentDateTime
+            .isBefore(lastCheckInDateTime.add(const Duration(hours: 2)))) {
+          return false;
+        }
+      }
+
+      await client.from('reservations').update({
+        'check_in_at': DateTime.now().toIso8601String(),
+        'status': 'Check In'
+      }).eq('nik', nik);
+
+      return true;
     } catch (e) {
       rethrow;
     }

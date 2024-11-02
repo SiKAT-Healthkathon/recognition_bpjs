@@ -99,6 +99,20 @@ class _CameraScreenState extends State<CameraScreen> {
         if (_response.status == DetectionStatus.success) {
           _user = await UserServices.getUserData(nik: _response.data!);
           setState(() {});
+          if (_user != null) {
+            bool checkInSuccess = await UserServices.checkIn(nik: _user!.nik);
+
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(checkInSuccess
+                      ? 'Check In Successful'
+                      : 'Check In Failed'),
+                  backgroundColor: checkInSuccess ? Colors.green : Colors.red,
+                ),
+              );
+            }
+          }
         }
       } catch (e) {
         debugPrint('Error processing WebSocket data: $e');
