@@ -47,7 +47,7 @@ This project using some technologies :
 - Python Face Recognition
 - Geolocation
 
-### Architecture of Kiddy System
+### Architecture of FlexQ System
 
 <p align="center">
   <img src="assets/arsitektur.png" width=600>
