@@ -100,18 +100,7 @@ class _CameraScreenState extends State<CameraScreen> {
           _user = await UserServices.getUserData(nik: _response.data!);
           setState(() {});
           if (_user != null) {
-            bool checkInSuccess = await UserServices.checkIn(nik: _user!.nik);
-
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(checkInSuccess
-                      ? 'Check In Successful'
-                      : 'Check In Failed'),
-                  backgroundColor: checkInSuccess ? Colors.green : Colors.red,
-                ),
-              );
-            }
+            await UserServices.checkIn(nik: _user!.nik);
           }
         }
       } catch (e) {
@@ -154,7 +143,7 @@ class _CameraScreenState extends State<CameraScreen> {
               ),
             ),
             SizedBox(
-              width: 240,
+              width: 200,
               child: Text(
                 message,
                 style: greyText.copyWith(

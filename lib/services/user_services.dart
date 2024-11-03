@@ -49,10 +49,16 @@ class UserServices {
         }
       }
 
-      await client.from('reservations').update({
-        'check_in_at': DateTime.now().toIso8601String(),
-        'status': 'Check In'
-      }).eq('nik', nik);
+      await client
+          .from('reservations')
+          .update({
+            'check_in_at': DateTime.now().toIso8601String(),
+            'status': 'Check In'
+          })
+          .eq('nik', nik)
+          .or('status.eq.Terdaftar,status.eq.Belum Datang')
+          .order('tanggal', ascending: true)
+          .limit(1);
 
       return true;
     } catch (e) {
